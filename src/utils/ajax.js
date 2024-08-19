@@ -1,12 +1,19 @@
 import axios from 'axios'
+import {message} from 'antd'
 const ajax = (url, data={}, type='GET') => {
   const t = type.toUpperCase()
-  if(t==='GET'){
-    return axios.get(url, {params: data})
-  }else if(t==='POST'){
-    return axios.post(url, data)
-  }else{
-    return new Promise()
-  }
+  let p
+  return new Promise((resolve,reject) => {
+    if(t==='GET'){
+      p = axios.get(url, {params: data})
+    }else if(t==='POST'){
+      p = axios.post(url, data)
+    }else{ }
+    p.then(
+      response => { resolve(response) },
+      error => { message.error('请求出错了：'+ error.message) }
+    )
+  })
 }
+
 export default ajax

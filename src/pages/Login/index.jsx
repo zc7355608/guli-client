@@ -8,10 +8,8 @@ import { reqLogin } from '../../api'
 const App = () => {
   const onFinish = async ({username,password}) => {
     // console.log('Received values of form: ', values)
-    try {
-      const response = await reqLogin(username,password)
-      console.log(response.data)
-    } catch (error) { alert(error) }
+    const response = await reqLogin(username,password)
+    console.log(response.data)
   }
 
   const rules = v => {
