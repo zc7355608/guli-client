@@ -10,7 +10,7 @@ const ajax = (url, data={}, type='GET') => {
       p = axios.post(url, data)
     }else{ }
     p.then(
-      response => { resolve(response) },
+      response => { resolve(response.data) },
       error => { message.error('请求出错了：'+ error.message) }
     )
   })

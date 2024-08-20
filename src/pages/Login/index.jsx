@@ -1,15 +1,35 @@
 import React from 'react'
+import {useNavigate} from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Form, Input, Flex } from 'antd'
+import { Button, Checkbox, Form, Input, Flex, message } from 'antd'
 import './index.css'
 import logo from './imgs/logo.png'
 import { reqLogin } from '../../api'
 
 const App = () => {
+  const [messageApi, contextHolder] = message.useMessage()
+  const navigate = useNavigate()
+
   const onFinish = async ({username,password}) => {
     // console.log('Received values of form: ', values)
-    const response = await reqLogin(username,password)
-    console.log(response.data)
+    const data = await reqLogin(username,password)
+    if(data.status===0){ // 登录成功
+      messageApi.open({
+        type: 'success',
+        content: '登录成功！',
+        duration: 1.5,
+      })
+      setTimeout(()=>{
+        navigate('/', {
+          replace: true
+        })
+      },1500)
+    }else{ // 登录失败
+      messageApi.open({
+        type: 'error',
+        content: data.msg,
+      })
+    }
   }
 
   const rules = v => {
@@ -35,6 +55,7 @@ const App = () => {
 
   return (
     <div className='login'>
+      {contextHolder}
       <header className='login-header'>
         <img src={logo} alt="logo"/>
         <h1>React项目：谷粒后台</h1>
