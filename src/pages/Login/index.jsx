@@ -10,7 +10,7 @@ const App = () => {
   const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
 
-  const onFinish = async ({username,password}) => {
+  const onFinish = async ({username,password,remember}) => {
     // console.log('Received values of form: ', values)
     const data = await reqLogin(username,password)
     if(data.status===0){ // 登录成功
@@ -19,6 +19,15 @@ const App = () => {
         content: '登录成功！',
         duration: 1.5,
       })
+      // 登录成功就将用户信息保存在浏览器中，这样刷新也不会丢失登录信息
+      if(remember){
+        // 如果勾选了记住密码，那么就放在localStorage中
+        localStorage.setItem('user',JSON.stringify(data.data))
+      }else{
+        // 如果没有保存密码，那么就放在sessionStorage中
+        sessionStorage.setItem('user',JSON.stringify(data.data))
+      }
+      // 跳转到用户信息页面
       setTimeout(()=>{
         navigate('/', {
           replace: true
